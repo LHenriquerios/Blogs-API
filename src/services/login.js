@@ -1,12 +1,14 @@
+const { BAD_REQUEST } = require('../statusCode');
 const { User } = require('../database/models');
+const generateToken = require('../utils/generateJWT');
 
-module.exports = async (email, _password) => {
-    console.log('entrou no service');
-    const user = await User.findOne({ where: { email } });
-    console.log(user);
+module.exports = async ({ email, password }) => {
+    const user = await User.findOne({ where: { email, password } });
     if (!user) {
-      const error = { status: 404, message: 'Invalid in Service' };
+      const error = { status: BAD_REQUEST, message: 'Invalid fields' };
       throw error;
     }
-    return user;
+    delete user.dataValues.password;
+    const token = generateToken(user);
+    return token;
 };
