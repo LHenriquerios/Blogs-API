@@ -5,7 +5,7 @@ module.exports = (schemas) => (req, res, next) => {
     if (error && error.details[0].message.includes('is required')) {
         next({ status: BAD_REQUEST, message: 'Some required fields are missing' });
     }
-      if (error) next({ status: BAD_REQUEST, message: error.details[0].message });
+    if (error) next({ status: BAD_REQUEST, message: error.details[0].message });
 
     next();
 };
