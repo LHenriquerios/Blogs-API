@@ -9,5 +9,5 @@ module.exports = async ({ email, password }) => {
       throw error;
     }
     delete user.dataValues.password;
-    generateToken(user);
+    return generateToken(user);
 };
