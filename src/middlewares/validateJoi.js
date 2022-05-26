@@ -1,6 +1,6 @@
 const { BAD_REQUEST } = require('../statusCode');
 
-module.exports = (schemas) => (req, _res, next) => {
+const validateLogin = (schemas) => (req, _res, next) => {
     const { error } = schemas.validate(req.body);
 
     if (error) {
@@ -17,4 +17,17 @@ module.exports = (schemas) => (req, _res, next) => {
     }
 
     next();
+};
+
+const validateUser = (schemas) => (req, _res, next) => {
+  const { error } = schemas.validate(req.body);
+
+  if (error) next({ status: BAD_REQUEST, message: error.details[0].message });
+
+  next();
+};
+
+module.exports = {
+  validateLogin,
+  validateUser,
 };
