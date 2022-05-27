@@ -27,7 +27,16 @@ const validateJoi = (schemas) => (req, _res, next) => {
   next();
 };
 
+const validatePost = (schemas) => (req, _res, next) => {
+  const { error } = schemas.validate(req.body);
+
+  if (error) next({ status: BAD_REQUEST, message: 'Some required fields are missing' });
+
+  next();
+};
+
 module.exports = {
   validateLogin,
   validateJoi,
+  validatePost,
 };
