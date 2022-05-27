@@ -1,5 +1,5 @@
 const { SUCESS, CREATED } = require('../statusCode');
-const services = require('../services/cotegory');
+const services = require('../services/category');
 
 const getAll = async (_req, res) => {
     const categories = await services.getAll();
