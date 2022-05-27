@@ -12,7 +12,12 @@ const schemaUser = Joi.object({
     image: Joi.string().required(),
 });
 
+const schemaCategory = Joi.object({
+    name: Joi.string().required(),
+});
+
 module.exports = {
     schemaLogin,
     schemaUser,
+    schemaCategory,
 };
