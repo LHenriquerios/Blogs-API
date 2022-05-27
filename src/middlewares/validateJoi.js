@@ -19,7 +19,7 @@ const validateLogin = (schemas) => (req, _res, next) => {
     next();
 };
 
-const validateUser = (schemas) => (req, _res, next) => {
+const validateJoi = (schemas) => (req, _res, next) => {
   const { error } = schemas.validate(req.body);
 
   if (error) next({ status: BAD_REQUEST, message: error.details[0].message });
@@ -29,5 +29,5 @@ const validateUser = (schemas) => (req, _res, next) => {
 
 module.exports = {
   validateLogin,
-  validateUser,
+  validateJoi,
 };
