@@ -17,5 +17,6 @@ postRouter.put('/:id',
     validatePost(schemaEditPost),
     rescue(authToken),
     rescue(postController.editPost));
+postRouter.delete('/:id', rescue(authToken), rescue(postController.deletePost));
 
 module.exports = postRouter;

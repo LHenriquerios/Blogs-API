@@ -1,4 +1,4 @@
-const { SUCESS, CREATED } = require('../statusCode');
+const { SUCESS, CREATED, NO_CONTENT } = require('../statusCode');
 const services = require('../services/post');
 
 const getAll = async (_req, res) => {
@@ -27,9 +27,17 @@ const editPost = async (req, res) => {
     return res.status(SUCESS).json(updatedPost);
 };
 
+const deletePost = async (req, res) => {
+    const userId = req.user.data.id;
+    const { id } = req.params;
+    await services.deletePost(id, userId);
+    return res.status(NO_CONTENT).end();
+};
+
 module.exports = {
     getAll,
     getById,
     createPost,
     editPost,
+    deletePost,
 };

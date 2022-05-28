@@ -54,10 +54,27 @@ const createPost = async ({ userId, title, content, categoryIds }) => {
 
 const editPost = async ({ id, userId, title, content }) => {
     const post = await BlogPost.findByPk(id);
-    
+    if (!post) {
+        const error = { status: NOT_FOUND, message: 'Post does not exist' };
+        throw error;
+    }
     if (post.dataValues.userId === userId) {
     await BlogPost.update({ title, content }, { where: { id } });
     return getById(id);
+    }
+    const error = { status: UNAUTHORIZED, message: 'Unauthorized user' };
+    throw error;
+};
+
+const deletePost = async (id, userId) => {
+    const post = await BlogPost.findByPk(id);
+    if (!post) {
+        const error = { status: NOT_FOUND, message: 'Post does not exist' };
+        throw error;
+    }
+    if (post.dataValues.userId === userId) {
+        await BlogPost.destroy({ where: { id } });
+        return;
     }
     const error = { status: UNAUTHORIZED, message: 'Unauthorized user' };
     throw error;
@@ -68,4 +85,5 @@ module.exports = {
     getById,
     createPost,
     editPost,
+    deletePost,
 };
