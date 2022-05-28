@@ -1,4 +1,4 @@
-const { SUCESS, CREATED } = require('../statusCode');
+const { SUCESS, CREATED, NO_CONTENT } = require('../statusCode');
 const services = require('../services/user');
 
 const getAll = async (_req, res) => {
@@ -17,8 +17,15 @@ const createUser = async (req, res) => {
     return res.status(CREATED).json({ token });
 };
 
+const deleteUser = async (req, res) => {
+    const { id } = req.user.data;
+    await services.deleteUser(id);
+    return res.status(NO_CONTENT).end();
+};
+
 module.exports = {
     getAll,
     getById,
     createUser,
+    deleteUser,
 };
