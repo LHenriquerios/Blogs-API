@@ -22,9 +22,15 @@ const schemaPost = Joi.object({
     categoryIds: Joi.array().items(Joi.number()).required(),
 });
 
+const schemaEditPost = Joi.object({
+    title: Joi.string().required(),
+    content: Joi.string().required(),
+});
+
 module.exports = {
     schemaLogin,
     schemaUser,
     schemaCategory,
     schemaPost,
+    schemaEditPost,
 };

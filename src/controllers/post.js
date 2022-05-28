@@ -19,8 +19,17 @@ const createPost = async (req, res) => {
     return res.status(CREATED).json(newPost);
 };
 
+const editPost = async (req, res) => {
+    const userId = req.user.data.id;
+    const { id } = req.params;
+    req.body = { id, userId, ...req.body };
+    const updatedPost = await services.editPost(req.body);
+    return res.status(SUCESS).json(updatedPost);
+};
+
 module.exports = {
     getAll,
     getById,
     createPost,
+    editPost,
 };

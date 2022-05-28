@@ -1,5 +1,5 @@
 const { BlogPost, User, Category, PostCategory } = require('../database/models');
-const { BAD_REQUEST, NOT_FOUND } = require('../statusCode');
+const { BAD_REQUEST, NOT_FOUND, UNAUTHORIZED } = require('../statusCode');
 
 const getAll = async () => BlogPost.findAll({
     include: [{
@@ -33,9 +33,7 @@ const getById = async (id) => {
 };
 
 const createPost = async ({ userId, title, content, categoryIds }) => {
-    const category = await Promise.all(categoryIds.map((id) => Category.findOne({
-        where: { id },
-    })));
+    const category = await Promise.all(categoryIds.map((id) => Category.findByPk(id)));
     const isnull = category.every((e) => e === null);
     if (isnull) {
         const error = { status: BAD_REQUEST, message: '"categoryIds" not found' };
@@ -54,8 +52,20 @@ const createPost = async ({ userId, title, content, categoryIds }) => {
     return newPost;
 };
 
+const editPost = async ({ id, userId, title, content }) => {
+    const post = await BlogPost.findByPk(id);
+    
+    if (post.dataValues.userId === userId) {
+    await BlogPost.update({ title, content }, { where: { id } });
+    return getById(id);
+    }
+    const error = { status: UNAUTHORIZED, message: 'Unauthorized user' };
+    throw error;
+};
+
 module.exports = {
     getAll,
     getById,
     createPost,
+    editPost,
 };
