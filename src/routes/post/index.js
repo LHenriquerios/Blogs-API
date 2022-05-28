@@ -7,6 +7,7 @@ const { validatePost } = require('../../middlewares/validateJoi');
 
 const postRouter = express.Router();
 
+postRouter.get('/search', rescue(authToken), rescue(postController.getByText));
 postRouter.get('/', rescue(authToken), rescue(postController.getAll));
 postRouter.get('/:id', rescue(authToken), rescue(postController.getById));
 postRouter.post('/',

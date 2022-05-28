@@ -12,6 +12,13 @@ const getById = async (req, res) => {
     return res.status(SUCESS).json(post);
 };
 
+const getByText = async (req, res) => {
+    const { q } = req.query;
+    console.log(q);
+    const post = await services.getByText(q);
+    return res.status(SUCESS).json(post);
+};
+
 const createPost = async (req, res) => {
     const { id } = req.user.data;
     req.body = { userId: id, ...req.body };
@@ -37,6 +44,7 @@ const deletePost = async (req, res) => {
 module.exports = {
     getAll,
     getById,
+    getByText,
     createPost,
     editPost,
     deletePost,

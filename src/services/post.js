@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const { BlogPost, User, Category, PostCategory } = require('../database/models');
 const { BAD_REQUEST, NOT_FOUND, UNAUTHORIZED } = require('../statusCode');
 
@@ -30,6 +31,24 @@ const getById = async (id) => {
     }
 
     return post;
+};
+
+const getByText = async (q) => {
+    const post = await BlogPost.findAll({ where: {
+        [Op.or]: [{
+                title: {
+                    [Op.substring]: q,
+                },
+            },
+            {
+                content: {
+                    [Op.substring]: q,
+                },
+            },
+        ],
+    },
+     });
+    return Promise.all(post.map((e) => getById(e.dataValues.id)));
 };
 
 const createPost = async ({ userId, title, content, categoryIds }) => {
@@ -83,6 +102,7 @@ const deletePost = async (id, userId) => {
 module.exports = {
     getAll,
     getById,
+    getByText,
     createPost,
     editPost,
     deletePost,
