@@ -1,5 +1,5 @@
 const { BlogPost, User, Category, PostCategory } = require('../database/models');
-const { BAD_REQUEST } = require('../statusCode');
+const { BAD_REQUEST, NOT_FOUND } = require('../statusCode');
 
 const getAll = async () => BlogPost.findAll({
     include: [{
@@ -11,6 +11,26 @@ const getAll = async () => BlogPost.findAll({
         model: Category, as: 'categories', through: { attributes: [] },
     }],
 });
+
+const getById = async (id) => {
+    const post = await BlogPost.findByPk(id, {
+        include: [{
+            model: User,
+            as: 'user',
+            attributes: { exclude: ['password'] },
+        },
+    {
+        model: Category, as: 'categories', through: { attributes: [] },
+    }],
+    });
+
+    if (!post) {
+        const error = { status: NOT_FOUND, message: 'Post does not exist' };
+        throw error;
+    }
+
+    return post;
+};
 
 const createPost = async ({ userId, title, content, categoryIds }) => {
     const category = await Promise.all(categoryIds.map((id) => Category.findOne({
@@ -36,5 +56,6 @@ const createPost = async ({ userId, title, content, categoryIds }) => {
 
 module.exports = {
     getAll,
+    getById,
     createPost,
 };

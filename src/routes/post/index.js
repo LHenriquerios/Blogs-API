@@ -8,6 +8,7 @@ const { validatePost } = require('../../middlewares/validateJoi');
 const postRouter = express.Router();
 
 postRouter.get('/', rescue(authToken), rescue(postController.getAll));
+postRouter.get('/:id', rescue(authToken), rescue(postController.getById));
 postRouter.post('/',
     validatePost(schemaPost),
     rescue(authToken),

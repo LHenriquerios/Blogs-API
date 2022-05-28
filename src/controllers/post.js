@@ -6,6 +6,12 @@ const getAll = async (_req, res) => {
     return res.status(SUCESS).json(posts);
 };
 
+const getById = async (req, res) => {
+    const { id } = req.params;
+    const post = await services.getById(id);
+    return res.status(SUCESS).json(post);
+};
+
 const createPost = async (req, res) => {
     const { id } = req.user.data;
     req.body = { userId: id, ...req.body };
@@ -15,5 +21,6 @@ const createPost = async (req, res) => {
 
 module.exports = {
     getAll,
+    getById,
     createPost,
 };
